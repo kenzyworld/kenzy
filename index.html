@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حكاية كنزي ♡ Kenzy's Story</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo, Amiri, Dancing Script, Great Vibes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=Dancing+Script:wght@600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cosmic: {
+                            900: '#0b021a',
+                            800: '#15062b',
+                            700: '#250a46',
+                            600: '#3a1068',
+                            glow: '#d946ef',
+                            pink: '#f472b6',
+                            violet: '#a855f7',
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                        script: ['"Dancing Script"', 'cursive'],
+                        vibes: ['"Great Vibes"', 'cursive']
+                    },
+                    boxShadow: {
+                        'neon-pink': '0 0 20px rgba(244, 114, 182, 0.5), 0 0 40px rgba(217, 70, 239, 0.3)',
+                        'neon-purple': '0 0 25px rgba(168, 85, 247, 0.6), 0 0 50px rgba(139, 92, 246, 0.4)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite ease-in-out',
+                        'float': 'float 6s infinite ease-in-out',
+                        'float-delayed': 'float 6s infinite ease-in-out 3s',
+                        'twinkle': 'twinkle 2s infinite alternate',
+                        'spin-slow': 'spin 20s linear infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { filter: 'drop-shadow(0 0 15px rgba(217, 70, 239, 0.8))' },
+                            '50%': { filter: 'drop-shadow(0 0 30px rgba(244, 114, 182, 1)) drop-shadow(0 0 50px rgba(168, 85, 247, 0.6))' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' }
+                        },
+                        twinkle: {
+                            '0%': { opacity: '0.3', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1.05)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #080114;
+            color: #f3e8ff;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-card {
+            background: rgba(26, 11, 46, 0.45);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(217, 70, 239, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(19, 3, 36, 0.5);
+        }
+
+        .glass-nav {
+            background: rgba(20, 6, 38, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(217, 70, 239, 0.3);
+        }
+
+        /* Text Neon Glow */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(217, 70, 239, 0.7), 0 0 20px rgba(168, 85, 247, 0.5), 0 0 35px rgba(236, 72, 153, 0.4);
+        }
+        .text-glow-gold {
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.7), 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b021a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6b21a8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9333ea;
+        }
+
+        /* Envelope Animation */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        .envelope-flap {
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+        }
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        /* Floating Hearts Canvas */
+        #heart-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Background Cosmic Canvas */
+        #cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="relative selection:bg-fuchsia-600 selection:text-white">
+
+    <!-- Canvas Background Layer -->
+    <canvas id="cosmic-bg"></canvas>
+    <canvas id="heart-canvas"></canvas>
+
+    <!-- Floating Audio Toggle Button (Music Box Synth) -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="musicToggleBtn" onclick="toggleAudio()" class="glass-card p-4 rounded-full flex items-center justify-center gap-2 border border-fuchsia-500/50 hover:border-fuchsia-400 text-fuchsia-300 hover:text-white hover:scale-110 transition-all duration-300 shadow-neon-pink group">
+            <svg id="musicIcon" class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12 0c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+            </svg>
+            <span id="musicText" class="text-xs font-semibold max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 whitespace-nowrap pl-1">موسيقانا ♡</span>
+        </button>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-4 left-0 right-0 z-40 px-4 max-w-6xl mx-auto">
+        <nav class="glass-nav rounded-full px-4 py-2.5 flex items-center justify-between border border-fuchsia-500/40 shadow-neon-purple transition-all duration-300">
+            <!-- Brand Logo -->
+            <a href="#home" class="font-vibes text-3xl text-fuchsia-300 hover:text-white transition-colors duration-300 flex items-center gap-2 pr-2 text-glow">
+                Kenzy <span class="text-pink-400 text-2xl">♡</span>
+            </a>
+
+            <!-- Navigation Links (Desktop) -->
+            <div class="hidden md:flex items-center gap-1 lg:gap-2 text-sm font-semibold">
+                <a href="#home" class="nav-link active-link px-4 py-1.5 rounded-full text-white bg-gradient-to-r from-fuchsia-700 to-purple-800 border border-fuchsia-400/50 shadow-neon-pink transition-all">الرئيسية</a>
+                <a href="#about" class="nav-link px-3 py-1.5 rounded-full text-purple-200 hover:text-white hover:bg-fuchsia-950/60 transition-all">عن كنزي</a>
+                <a href="#special" class="nav-link px-3 py-1.5 rounded-full text-purple-200 hover:text-white hover:bg-fuchsia-950/60 transition-all">لماذا مميزة؟</a>
+                <a href="#letters" class="nav-link px-3 py-1.5 rounded-full text-purple-200 hover:text-white hover:bg-fuchsia-950/60 transition-all">رسائل حب</a>
+                <a href="#surprise" class="nav-link px-3 py-1.5 rounded-full text-purple-200 hover:text-white hover:bg-fuchsia-950/60 transition-all">مفاجأة لكي</a>
+                <a href="#finale" class="nav-link px-3 py-1.5 rounded-full text-purple-200 hover:text-white hover:bg-fuchsia-950/60 transition-all">الخاتمة</a>
+            </div>
+
+            <!-- Header Heart Icon -->
+            <div class="flex items-center gap-2 pl-2">
+                <button onclick="triggerHeartBurst(event)" title="أرسل حب" class="p-2 rounded-full text-pink-400 hover:text-fuchsia-200 hover:scale-125 transition-transform duration-300">
+                    <svg class="w-6 h-6 fill-current animate-pulse-glow" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </button>
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-purple-200 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden mt-2 glass-card rounded-2xl p-4 flex flex-col gap-2 border border-fuchsia-500/40 shadow-neon-purple animate-fadeIn">
+            <a href="#home" onclick="toggleMobileMenu()" class="px-4 py-2 rounded-xl text-white bg-fuchsia-900/60">الرئيسية</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="px-4 py-2 rounded-xl text-purple-200 hover:bg-purple-900/40">عن كنزي</a>
+            <a href="#special" onclick="toggleMobileMenu()" class="px-4 py-2 rounded-xl text-purple-200 hover:bg-purple-900/40">لماذا مميزة؟</a>
+            <a href="#letters" onclick="toggleMobileMenu()" class="px-4 py-2 rounded-xl text-purple-200 hover:bg-purple-900/40">رسائل حب</a>
+            <a href="#surprise" onclick="toggleMobileMenu()" class="px-4 py-2 rounded-xl text-purple-200 hover:bg-purple-900/40">مفاجأة لكي</a>
+            <a href="#finale" onclick="toggleMobileMenu()" class="px-4 py-2 rounded-xl text-purple-200 hover:bg-purple-900/40">الخاتمة</a>
+        </div>
+    </header>
+
+    <!-- SECTION 1: HERO SECTION -->
+    <section id="home" class="relative min-h-screen pt-28 pb-16 flex flex-col justify-center items-center overflow-hidden px-4">
+        
+        <!-- Glowing Full Moon Graphic with Internal Heart Silhouette -->
+        <div class="absolute top-16 left-6 md:left-24 w-40 h-40 md:w-64 md:h-64 rounded-full bg-gradient-to-br from-fuchsia-100 via-purple-300 to-indigo-900 shadow-[0_0_80px_rgba(217,70,239,0.7)] flex items-center justify-center opacity-90 animate-pulse-glow z-0">
+            <!-- Subtle Heart Outline inside Moon -->
+            <svg class="w-24 h-24 md:w-36 md:h-36 text-fuchsia-500/30 fill-current" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+        </div>
+
+        <!-- Handwritten Romantic Top Note (Right Side) -->
+        <div class="absolute top-24 right-6 md:right-20 z-10 hidden sm:block">
+            <div class="font-amiri text-fuchsia-300 text-xl md:text-2xl transform rotate-6 border-b border-fuchsia-500/40 pb-1 text-glow">
+                كنزي .. وأبداً ♡
+            </div>
+        </div>
+
+        <!-- Castle Backdrop Illustration SVG (Right bottom area) -->
+        <div class="absolute bottom-10 right-4 md:right-16 opacity-30 pointer-events-none z-0">
+            <svg class="w-48 md:w-80 h-auto text-fuchsia-400 fill-current" viewBox="0 0 500 400">
+                <path d="M150 400 V200 L180 150 L210 200 V400 Z M210 400 V120 L250 60 L290 120 V400 Z M290 400 V220 L320 170 L350 220 V400 Z M100 400 V280 L125 240 L150 280 V400 Z M350 400 V270 L375 230 L400 270 V400 Z"/>
+                <!-- Castle Windows -->
+                <circle cx="250" cy="140" r="12" class="text-fuchsia-200 fill-current" />
+                <rect x="242" y="220" width="16" height="30" rx="8" class="text-fuchsia-200 fill-current" />
+            </svg>
+        </div>
+
+        <!-- Main Content Hero Box -->
+        <div class="relative z-10 max-w-4xl text-center space-y-6 mt-6">
+            
+            <!-- Royal Crown SVG Header -->
+            <div class="flex justify-center mb-2">
+                <svg class="w-20 h-20 md:w-28 md:h-28 text-amber-300 filter drop-shadow-[0_0_15px_rgba(251,191,36,0.8)] animate-float" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2 19h20M3 19l2.5-12 4.5 5 4-8 4 8 4.5-5 2.5 12" />
+                    <circle cx="5.5" cy="7" r="1.5" fill="currentColor"/>
+                    <circle cx="10" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="14" cy="4" r="1.5" fill="currentColor"/>
+                    <circle cx="18" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="22.5" cy="7" r="1.5" fill="currentColor"/>
+                </svg>
+            </div>
+
+            <!-- Calligraphic Title -->
+            <h1 class="font-amiri text-6xl md:text-8xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-fuchsia-200 to-purple-300 text-glow leading-tight">
+                إلى كنزي ♡
+            </h1>
+
+            <p class="font-cairo text-2xl md:text-3xl font-semibold text-fuchsia-200 tracking-wide text-glow">
+                أجمل قصة حب .. وأغلى نعمة في حياتي ♡
+            </p>
+
+            <!-- Decorative Flourish Divider -->
+            <div class="flex items-center justify-center gap-4 my-4 opacity-80">
+                <div class="w-24 h-0.5 bg-gradient-to-r from-transparent to-fuchsia-400"></div>
+                <span class="text-pink-400 text-2xl">♡</span>
+                <div class="w-24 h-0.5 bg-gradient-to-l from-transparent to-fuchsia-400"></div>
+            </div>
+
+            <!-- Poetic Verse Block -->
+            <div class="glass-card max-w-2xl mx-auto p-6 md:p-8 rounded-3xl border border-fuchsia-500/30 shadow-neon-purple transform hover:scale-[1.02] transition-transform duration-500">
+                <p class="font-amiri text-xl md:text-2xl leading-relaxed text-purple-100 italic">
+                    "يا كنزي .. يا أجمل أقداري وأعظم ما وهبني الزمان<br>
+                    وجودك في حياتي هو السعادة، وابتسامتك هي الحياة<br>
+                    أنتِ لستِ مجرد حب .. بل أنتِ عالمي كله ♡"
+                </p>
+            </div>
+
+            <!-- CTA Scroll Down Button -->
+            <div class="pt-6 flex flex-col items-center gap-4">
+                <a href="#about" class="group relative px-8 py-3.5 rounded-full font-bold text-lg text-white bg-gradient-to-r from-fuchsia-600 via-purple-600 to-pink-600 border border-fuchsia-300/60 shadow-neon-pink hover:shadow-[0_0_35px_rgba(244,114,182,0.8)] hover:scale-105 transition-all duration-300 flex items-center gap-3">
+                    <span>اكتشفي المزيد ♡</span>
+                    <svg class="w-5 h-5 group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom Hero Decorative Floating Items -->
+        <div class="w-full max-w-6xl mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 items-end relative z-10 px-4">
+            
+            <!-- Left Item: Styled Rose Bouquet Tag -->
+            <div class="glass-card p-4 rounded-2xl border border-fuchsia-500/40 flex items-center gap-4 animate-float shadow-neon-purple">
+                <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-fuchsia-900 to-purple-600 flex items-center justify-center text-pink-300 text-2xl shadow-inner">
+                    💐
+                </div>
+                <div>
+                    <div class="font-vibes text-2xl text-pink-300">To: Kenzy ♡</div>
+                    <div class="text-xs text-purple-200 mt-1 font-semibold">لأنكِ مميزة .. دائماً ♡</div>
+                </div>
+            </div>
+
+            <!-- Center Item: Glowing Downward Scroll Indicator -->
+            <div class="hidden md:flex justify-center">
+                <a href="#about" class="p-3 rounded-full border border-fuchsia-400/50 text-fuchsia-300 hover:text-white glass-card animate-bounce shadow-neon-pink">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7-7-7m14-8l-7 7-7-7"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Right Item: Teddy Bear Card -->
+            <div class="glass-card p-4 rounded-2xl border border-fuchsia-500/40 flex items-center gap-4 animate-float-delayed shadow-neon-purple">
+                <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-900 to-fuchsia-600 flex items-center justify-center text-3xl shadow-inner">
+                    🧸
+                </div>
+                <div>
+                    <div class="text-sm font-bold text-fuchsia-200">I Love You ♡</div>
+                    <div class="text-xs text-purple-300">ملكة كل الأوقات والسنوات</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: ABOUT KENZY & LOVE COUNTER -->
+    <section id="about" class="py-20 relative z-10 px-4 max-w-6xl mx-auto">
+        
+        <!-- Section Title Header -->
+        <div class="text-center space-y-3 mb-16">
+            <h2 class="font-amiri text-4xl md:text-5xl font-bold text-fuchsia-200 text-glow">
+                عن كنز حياتي ♡
+            </h2>
+            <p class="text-purple-300 text-lg">كل تفصيلة فيكِ هي أروع سر لسعادتي</p>
+            <div class="w-20 h-1 bg-gradient-to-r from-fuchsia-500 to-pink-500 mx-auto rounded-full shadow-neon-pink"></div>
+        </div>
+
+        <!-- Personality & Tribute Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            
+            <!-- Card 1 -->
+            <div class="glass-card p-8 rounded-3xl border border-fuchsia-500/30 shadow-neon-purple hover:border-fuchsia-400 transition-all duration-300 group hover:-translate-y-2">
+                <div class="w-16 h-16 rounded-2xl bg-fuchsia-900/60 border border-fuchsia-500/40 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-neon-pink">
+                    ✨
+                </div>
+                <h3 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-3">روحكِ الساحرة</h3>
+                <p class="text-purple-200 text-sm leading-relaxed">
+                    تملكين روحاً نقية تفيض دفئاً ولطفاً، تجعل كل من حولكِ يشعر بالأمان والجمال وكأنكِ زهرة نادرة لا تذبل.
+                </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-card p-8 rounded-3xl border border-fuchsia-500/30 shadow-neon-purple hover:border-fuchsia-400 transition-all duration-300 group hover:-translate-y-2">
+                <div class="w-16 h-16 rounded-2xl bg-fuchsia-900/60 border border-fuchsia-500/40 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-neon-pink">
+                    👑
+                </div>
+                <h3 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-3">ابتسامتكِ المضيئة</h3>
+                <p class="text-purple-200 text-sm leading-relaxed">
+                    ابتسامتك ليست مجرد مظهر، بل هي شعاع نيون من الأمل ينير أظلم أيامي ويجعل قلبي ينبض بحبك من جديد.
+                </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-card p-8 rounded-3xl border border-fuchsia-500/30 shadow-neon-purple hover:border-fuchsia-400 transition-all duration-300 group hover:-translate-y-2">
+                <div class="w-16 h-16 rounded-2xl bg-fuchsia-900/60 border border-fuchsia-500/40 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-neon-pink">
+                    💖
+                </div>
+                <h3 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-3">قلبكِ الحنون</h3>
+                <p class="text-purple-200 text-sm leading-relaxed">
+                    قلبك يحتضن كل تفاصيلي بكل حب وتفهم. معكِ عرفت المعنى الحقيقي للوطن الذي أسكن إليه دائماً.
+                </p>
+            </div>
+        </div>
+
+        <!-- Interactive Love Counter Box -->
+        <div class="glass-card p-8 md:p-10 rounded-3xl border border-pink-500/40 shadow-neon-pink text-center max-w-4xl mx-auto relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-36 h-36 bg-fuchsia-600/20 rounded-full blur-2xl"></div>
+            
+            <h3 class="font-amiri text-3xl md:text-4xl font-bold text-fuchsia-200 mb-2">
+                عداد حكايتنا وغرامنا ♡
+            </h3>
+            <p class="text-sm text-purple-300 mb-8">معاً منذ بدأت أجمل أيام العمر</p>
+
+            <!-- Counter Units Display -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6 mb-8">
+                <div class="glass-card p-4 md:p-6 rounded-2xl border border-fuchsia-500/40 bg-fuchsia-950/40">
+                    <span id="counter-days" class="font-cairo text-4xl md:text-5xl font-black text-fuchsia-300 text-glow">0</span>
+                    <span class="block text-xs md:text-sm text-purple-200 mt-2 font-semibold">يوماً</span>
+                </div>
+                <div class="glass-card p-4 md:p-6 rounded-2xl border border-fuchsia-500/40 bg-fuchsia-950/40">
+                    <span id="counter-hours" class="font-cairo text-4xl md:text-5xl font-black text-pink-300 text-glow">0</span>
+                    <span class="block text-xs md:text-sm text-purple-200 mt-2 font-semibold">ساعة</span>
+                </div>
+                <div class="glass-card p-4 md:p-6 rounded-2xl border border-fuchsia-500/40 bg-fuchsia-950/40">
+                    <span id="counter-minutes" class="font-cairo text-4xl md:text-5xl font-black text-purple-300 text-glow">0</span>
+                    <span class="block text-xs md:text-sm text-purple-200 mt-2 font-semibold">دقيقة</span>
+                </div>
+                <div class="glass-card p-4 md:p-6 rounded-2xl border border-fuchsia-500/40 bg-fuchsia-950/40">
+                    <span id="counter-seconds" class="font-cairo text-4xl md:text-5xl font-black text-fuchsia-400 text-glow">0</span>
+                    <span class="block text-xs md:text-sm text-purple-200 mt-2 font-semibold">ثانية</span>
+                </div>
+            </div>
+
+            <!-- Date Picker Controls -->
+            <div class="flex flex-wrap items-center justify-center gap-4 text-sm">
+                <span class="text-purple-300">تاريخ بداية حكايتنا:</span>
+                <input type="date" id="loveStartDate" value="2025-09-10" class="bg-purple-950/70 border border-fuchsia-500/50 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-fuchsia-400 shadow-inner">
+                <button onclick="updateLoveDate()" class="px-5 py-2 rounded-xl bg-fuchsia-700 hover:bg-fuchsia-600 text-white font-semibold transition-all shadow-neon-purple">
+                    تحديث العداد ✨
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: WHY SHE IS SPECIAL -->
+    <section id="special" class="py-20 relative z-10 px-4 max-w-6xl mx-auto">
+        <div class="text-center space-y-3 mb-16">
+            <h2 class="font-amiri text-4xl md:text-5xl font-bold text-fuchsia-200 text-glow">
+                لماذا كنزي مميزة؟ 🌟
+            </h2>
+            <p class="text-purple-300 text-lg">أسباب لا تنتهي تجعلكِ الملكة الاستثنائية</p>
+            <div class="w-20 h-1 bg-gradient-to-r from-fuchsia-500 to-pink-500 mx-auto rounded-full shadow-neon-pink"></div>
+        </div>
+
+        <!-- Dynamic Reasons Grid -->
+        <div id="reasonsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Reason 1 -->
+            <div class="glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-pink-400/60 transition-all duration-300 relative group overflow-hidden">
+                <div class="text-4xl mb-4">🌙</div>
+                <h4 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">تضيئين عتمة الأيام</h4>
+                <p class="text-purple-200 text-sm">مهما كانت الحياة صعبة، مجرد حديث بسيط معكِ يعيد الأمل والنور لقلبي.</p>
+                <div class="mt-4 text-xs font-semibold text-pink-400 flex items-center gap-1">
+                    <span>سبب رقم #1</span> ♡
+                </div>
+            </div>
+
+            <!-- Reason 2 -->
+            <div class="glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-pink-400/60 transition-all duration-300 relative group overflow-hidden">
+                <div class="text-4xl mb-4">🎶</div>
+                <h4 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">ضحكتكِ معزوفة موسيقية</h4>
+                <p class="text-purple-200 text-sm">ضحكتك النقية هي أجمل نغمة سمعتها أذناي، تشفيني وتملأ روحي بالفرح.</p>
+                <div class="mt-4 text-xs font-semibold text-pink-400 flex items-center gap-1">
+                    <span>سبب رقم #2</span> ♡
+                </div>
+            </div>
+
+            <!-- Reason 3 -->
+            <div class="glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-pink-400/60 transition-all duration-300 relative group overflow-hidden">
+                <div class="text-4xl mb-4">💎</div>
+                <h4 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">أصيلة ونادرة جداً</h4>
+                <p class="text-purple-200 text-sm">معدنك النقي واهتمامك الدائم بالتفاصيل الصغرى يثبت لي كل يوم أنكِ جوهرة نادرة.</p>
+                <div class="mt-4 text-xs font-semibold text-pink-400 flex items-center gap-1">
+                    <span>سبب رقم #3</span> ♡
+                </div>
+            </div>
+
+            <!-- Reason 4 -->
+            <div class="glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-pink-400/60 transition-all duration-300 relative group overflow-hidden">
+                <div class="text-4xl mb-4">🌺</div>
+                <h4 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">تفهمين قلبي بدون كلام</h4>
+                <p class="text-purple-200 text-sm">تكفيك نظرة واحدة لتعرفي ما أشعر به، وكأن روحكِ متصلة بروحي بأمر من السماء.</p>
+                <div class="mt-4 text-xs font-semibold text-pink-400 flex items-center gap-1">
+                    <span>سبب رقم #4</span> ♡
+                </div>
+            </div>
+
+            <!-- Reason 5 -->
+            <div class="glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-pink-400/60 transition-all duration-300 relative group overflow-hidden">
+                <div class="text-4xl mb-4">🏰</div>
+                <h4 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">أنكِ أنتِ .. كنزي</h4>
+                <p class="text-purple-200 text-sm">لا أحتاج أسباباً معقدة، فكونكِ كنزي وحبيبتي هو يكفي لأحبك كل ثانية للابد.</p>
+                <div class="mt-4 text-xs font-semibold text-pink-400 flex items-center gap-1">
+                    <span>سبب رقم #5</span> ♡
+                </div>
+            </div>
+
+            <!-- Reason 6 -->
+            <div class="glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-pink-400/60 transition-all duration-300 relative group overflow-hidden">
+                <div class="text-4xl mb-4">🔮</div>
+                <h4 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">وجودك يحول العادي لسحر</h4>
+                <p class="text-purple-200 text-sm">أي مكان تكونين فيه يصبح أميراً ومبهجاً، تنشرين السعادة أينما حللتِ.</p>
+                <div class="mt-4 text-xs font-semibold text-pink-400 flex items-center gap-1">
+                    <span>سبب رقم #6</span> ♡
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: LOVE LETTERS -->
+    <section id="letters" class="py-20 relative z-10 px-4 max-w-6xl mx-auto">
+        <div class="text-center space-y-3 mb-16">
+            <h2 class="font-amiri text-4xl md:text-5xl font-bold text-fuchsia-200 text-glow">
+                رسائل مكتوبة بحب 💌
+            </h2>
+            <p class="text-purple-300 text-lg">انقري على مظروف الرسالة لفتحه وقراءة ما بداخل قلبكِ</p>
+            <div class="w-20 h-1 bg-gradient-to-r from-fuchsia-500 to-pink-500 mx-auto rounded-full shadow-neon-pink"></div>
+        </div>
+
+        <!-- Envelopes Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Letter Envelope 1 -->
+            <div class="envelope-card glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all text-center flex flex-col items-center">
+                <div class="text-5xl mb-4 animate-bounce">✉️</div>
+                <h3 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">رسالة الوعد</h3>
+                <p class="text-purple-300 text-xs mb-4">رسالة خاصة رقم #1</p>
+                <button onclick="openLetterModal(1)" class="w-full py-2.5 rounded-2xl bg-fuchsia-800/60 hover:bg-fuchsia-700 text-white font-semibold border border-fuchsia-400/40 shadow-neon-purple transition-all">
+                    افتحي الرسالة ✨
+                </button>
+            </div>
+
+            <!-- Letter Envelope 2 -->
+            <div class="envelope-card glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all text-center flex flex-col items-center">
+                <div class="text-5xl mb-4 animate-bounce">💌</div>
+                <h3 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">رسالة الامتنان</h3>
+                <p class="text-purple-300 text-xs mb-4">رسالة خاصة رقم #2</p>
+                <button onclick="openLetterModal(2)" class="w-full py-2.5 rounded-2xl bg-fuchsia-800/60 hover:bg-fuchsia-700 text-white font-semibold border border-fuchsia-400/40 shadow-neon-purple transition-all">
+                    افتحي الرسالة ✨
+                </button>
+            </div>
+
+            <!-- Letter Envelope 3 -->
+            <div class="envelope-card glass-card p-6 rounded-3xl border border-fuchsia-500/30 hover:border-fuchsia-400 transition-all text-center flex flex-col items-center">
+                <div class="text-5xl mb-4 animate-bounce">💖</div>
+                <h3 class="font-amiri text-2xl font-bold text-fuchsia-200 mb-2">رسالة الأبدية</h3>
+                <p class="text-purple-300 text-xs mb-4">رسالة خاصة رقم #3</p>
+                <button onclick="openLetterModal(3)" class="w-full py-2.5 rounded-2xl bg-fuchsia-800/60 hover:bg-fuchsia-700 text-white font-semibold border border-fuchsia-400/40 shadow-neon-purple transition-all">
+                    افتحي الرسالة ✨
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Pop-up for Letters -->
+    <div id="letterModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full p-8 rounded-3xl border border-fuchsia-400 shadow-neon-pink relative animate-scaleUp">
+            <button onclick="closeLetterModal()" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-fuchsia-900/80 text-white flex items-center justify-center text-xl hover:bg-fuchsia-700">
+                ✕
+            </button>
+            <div id="modalLetterContent" class="space-y-4">
+                <!-- Content injected dynamically via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: A SURPRISE FOR YOU -->
+    <section id="surprise" class="py-20 relative z-10 px-4 max-w-5xl mx-auto">
+        <div class="glass-card p-10 md:p-14 rounded-3xl border border-pink-500/50 shadow-neon-pink text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-fuchsia-900/20 via-transparent to-purple-950/40"></div>
+            
+            <div class="relative z-10 space-y-6">
+                <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-fuchsia-600 to-pink-500 flex items-center justify-center text-5xl shadow-[0_0_40px_rgba(244,114,182,0.7)] animate-bounce">
+                    🎁
+                </div>
+
+                <h2 class="font-amiri text-4xl md:text-6xl font-bold text-fuchsia-100 text-glow">
+                    مفاجأة خاصة لملكتي كنزي ✨
+                </h2>
+
+                <p class="text-purple-200 text-lg max-w-xl mx-auto">
+                    اضغطي على الزر أدناه لتكتشفي مفاجأة الحب والعهد الأبدي المحفوظ باسمكِ!
+                </p>
+
+                <button id="surpriseBtn" onclick="revealSurprise()" class="px-10 py-4 rounded-full bg-gradient-to-r from-fuchsia-600 via-pink-600 to-purple-600 text-white text-xl font-black border border-pink-300 shadow-[0_0_30px_rgba(236,72,153,0.8)] hover:scale-110 transition-all duration-300">
+                    افتحي المفاجأة ✨
+                </button>
+            </div>
+
+            <!-- Hidden Royal Certificate Revealed upon click -->
+            <div id="certificateContainer" class="hidden mt-12 p-8 rounded-3xl border-2 border-amber-300/80 bg-gradient-to-b from-purple-950/90 via-fuchsia-950/90 to-purple-950/90 shadow-[0_0_60px_rgba(251,191,36,0.4)] text-center space-y-6 relative animate-fadeIn">
+                
+                <div class="flex justify-center">
+                    <span class="text-5xl">👑</span>
+                </div>
+
+                <h3 class="font-amiri text-3xl md:text-5xl font-bold text-amber-300 text-glow-gold">
+                    شهادة ملكة القلب والروح
+                </h3>
+
+                <p class="font-amiri text-2xl text-purple-100 italic max-w-2xl mx-auto leading-relaxed">
+                    "تشهد هذه الوثيقة أن الأنسة الحبيبة <span class="text-pink-300 font-bold underline">كنزي</span> هي المالكة الوحيدة لعرش القلب، والملكة المتوجة على كل أيام العمر، بقرار صادر من الروح وبحب لا ينتهي أبداً ♡"
+                </p>
+
+                <div class="flex justify-around items-center pt-6 border-t border-amber-300/30 text-amber-200 text-sm font-semibold">
+                    <div>التاريخ: <span class="text-white">إلى الأبد ♡</span></div>
+                    <div class="text-2xl">💍</div>
+                    <div>التوقيع: <span class="text-white">مُحبكِ الدائم ♡</span></div>
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="triggerHeartBurst(event)" class="px-6 py-2.5 rounded-full bg-pink-600 hover:bg-pink-500 text-white font-bold text-sm shadow-neon-pink">
+                        إرسال نبضة حب الآن 💓
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: THE FINALE -->
+    <section id="finale" class="py-20 relative z-10 px-4 max-w-4xl mx-auto text-center space-y-8">
+        <div class="space-y-4">
+            <h2 class="font-vibes text-6xl text-fuchsia-300 text-glow">Kenzy Forever ♡</h2>
+            <h3 class="font-amiri text-4xl md:text-5xl font-bold text-fuchsia-100">
+                بكل الحب .. إلى الأبد ♡
+            </h3>
+            <p class="text-purple-200 text-lg leading-relaxed max-w-2xl mx-auto">
+                شكرًا لأنكِ أنتِ، وشكرًا لكل ضحكة ولحظة وجمال تزرعينه في حياتي. 
+                أعدكِ أن أظل أحبكِ وأصون هذا الحب ما حييت.
+            </p>
+        </div>
+
+        <div class="pt-4 flex justify-center">
+            <button onclick="triggerHeartBurst(event)" class="p-6 rounded-full bg-gradient-to-tr from-fuchsia-600 to-pink-500 text-white shadow-neon-pink hover:scale-125 transition-transform duration-300 animate-pulse">
+                <svg class="w-10 h-10 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </button>
+        </div>
+
+        <footer class="pt-12 text-xs text-purple-400 border-t border-fuchsia-500/20">
+            صُنِعَ بشغف وحب لأجل <span class="text-fuchsia-300 font-bold">كنزي</span> ♡ جميع الحقوق محفوظة لقلبين لا يفترقان.
+        </footer>
+    </section>
+
+    <!-- JavaScript Logic -->
+    <script>
+        /* -------------------------------------------------------------
+         * 1. COSMIC CANVAS & SHOOTING STARS BACKGROUND
+         * ------------------------------------------------------------- */
+        const bgCanvas = document.getElementById('cosmic-bg');
+        const bgCtx = bgCanvas.getContext('2d');
+        let width = bgCanvas.width = window.innerWidth;
+        let height = bgCanvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = bgCanvas.width = window.innerWidth;
+            height = bgCanvas.height = window.innerHeight;
+            initStars();
+        });
+
+        let stars = [];
+        let shootingStars = [];
+
+        function initStars() {
+            stars = [];
+            const starCount = Math.floor((width * height) / 3000);
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.02 + 0.005,
+                    color: Math.random() > 0.5 ? '#f472b6' : '#a855f7'
+                });
+            }
+        }
+
+        function createShootingStar() {
+            if (Math.random() < 0.03) {
+                shootingStars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * (height / 2),
+                    length: Math.random() * 80 + 40,
+                    speed: Math.random() * 10 + 6,
+                    angle: 45 * Math.PI / 180,
+                    alpha: 1
+                });
+            }
+        }
+
+        function animateBg() {
+            bgCtx.clearRect(0, 0, width, height);
+
+            // Draw Static Stars with gentle pulse
+            stars.forEach(star => {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0.2) star.speed = -star.speed;
+
+                bgCtx.fillStyle = star.color;
+                bgCtx.globalAlpha = star.alpha;
+                bgCtx.beginPath();
+                bgCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                bgCtx.fill();
+            });
+
+            // Draw Shooting Stars
+            createShootingStar();
+            for (let i = shootingStars.length - 1; i >= 0; i--) {
+                const s = shootingStars[i];
+                bgCtx.strokeStyle = 'rgba(244, 114, 182, ' + s.alpha + ')';
+                bgCtx.lineWidth = 2;
+                bgCtx.beginPath();
+                bgCtx.moveTo(s.x, s.y);
+                bgCtx.lineTo(s.x + Math.cos(s.angle) * s.length, s.y + Math.sin(s.angle) * s.length);
+                bgCtx.stroke();
+
+                s.x += Math.cos(s.angle) * s.speed;
+                s.y += Math.sin(s.angle) * s.speed;
+                s.alpha -= 0.015;
+
+                if (s.alpha <= 0) {
+                    shootingStars.splice(i, 1);
+                }
+            }
+
+            bgCtx.globalAlpha = 1;
+            requestAnimationFrame(animateBg);
+        }
+
+        initStars();
+        animateBg();
+
+        /* -------------------------------------------------------------
+         * 2. HEART BURST CANVAS INTERACTION
+         * ------------------------------------------------------------- */
+        const heartCanvas = document.getElementById('heart-canvas');
+        const heartCtx = heartCanvas.getContext('2d');
+        heartCanvas.width = window.innerWidth;
+        heartCanvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            heartCanvas.width = window.innerWidth;
+            heartCanvas.height = window.innerHeight;
+        });
+
+        let particles = [];
+
+        function triggerHeartBurst(e) {
+            const x = e.clientX || window.innerWidth / 2;
+            const y = e.clientY || window.innerHeight / 2;
+
+            for (let i = 0; i < 35; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8 - 2,
+                    size: Math.random() * 18 + 12,
+                    alpha: 1,
+                    rotation: Math.random() * Math.PI,
+                    color: ['#f472b6', '#d946ef', '#ec4899', '#c084fc'][Math.floor(Math.random() * 4)]
+                });
+            }
+        }
+
+        function animateHearts() {
+            heartCtx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.018;
+
+                heartCtx.save();
+                heartCtx.globalAlpha = p.alpha;
+                heartCtx.translate(p.x, p.y);
+                heartCtx.font = `${p.size}px sans-serif`;
+                heartCtx.fillText('💖', 0, 0);
+                heartCtx.restore();
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animateHearts);
+        }
+        animateHearts();
+
+        /* -------------------------------------------------------------
+         * 3. LOVE COUNTER TIMER
+         * ------------------------------------------------------------- */
+        let loveStartDate = new Date('2025-09-10T00:00:00');
+
+        function updateLoveCounter() {
+            const now = new Date();
+            const diff = now - loveStartDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('counter-days').innerText = days;
+            document.getElementById('counter-hours').innerText = hours;
+            document.getElementById('counter-minutes').innerText = minutes;
+            document.getElementById('counter-seconds').innerText = seconds;
+        }
+
+        function updateLoveDate() {
+            const dateInput = document.getElementById('loveStartDate').value;
+            if (dateInput) {
+                loveStartDate = new Date(dateInput + 'T00:00:00');
+                updateLoveCounter();
+            }
+        }
+
+        setInterval(updateLoveCounter, 1000);
+        updateLoveCounter();
+
+        /* -------------------------------------------------------------
+         * 4. LOVE LETTERS MODAL LOGIC
+         * ------------------------------------------------------------- */
+        const letterContents = {
+            1: {
+                title: "رسالة الوعد الأبدي 💍",
+                body: "حبيبتي الملكة كنزي .. في هذا الكون الفسيح، أنتِ النجمة الوحيدة التي تهدي قلبي. أعدكِ أن أظل يدكِ الدافئة في عواصف الحياة، وأن أحافظ على هذه الابتسامة التي تنير عالمي كله كل يوم وكل ثانية."
+            },
+            2: {
+                title: "رسالة الامتنان والنعمة 🌸",
+                body: "إلى كنزي .. وجودكِ في حياتي ليس مجرد حظ سعيد، بل هو أعظم نعمة وهبني الله إياها. شكراً لأنكِ تملئين الأيام بالدفء والبهجة والطمأنينة."
+            },
+            3: {
+                title: "رسالة الأبدية والعشق 💖",
+                body: "يا كنزي .. إذا كان للحب عمر، فعمري معكِ لا يقاس بالسنوات بل بنبضات السعادة التي تنبضين بها في صدري. أنتِ البداية والنهاية وكل ما بينهما."
+            }
+        };
+
+        function openLetterModal(id) {
+            const modal = document.getElementById('letterModal');
+            const content = document.getElementById('modalLetterContent');
+            const item = letterContents[id];
+
+            content.innerHTML = `
+                <div class="text-center space-y-4">
+                    <span class="text-5xl">📜</span>
+                    <h3 class="font-amiri text-3xl font-bold text-fuchsia-200 text-glow">${item.title}</h3>
+                    <p class="font-amiri text-xl leading-relaxed text-purple-100 italic pt-2">${item.body}</p>
+                    <div class="pt-4 font-vibes text-3xl text-pink-300">With All My Love, Always ♡</div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeLetterModal() {
+            document.getElementById('letterModal').classList.add('hidden');
+        }
+
+        /* -------------------------------------------------------------
+         * 5. SURPRISE CERTIFICATE REVEAL
+         * ------------------------------------------------------------- */
+        function revealSurprise() {
+            const container = document.getElementById('certificateContainer');
+            container.classList.remove('hidden');
+            container.scrollIntoView({ behavior: 'smooth' });
+            triggerHeartBurst({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+        }
+
+        /* -------------------------------------------------------------
+         * 6. MOBILE MENU TOGGLE
+         * ------------------------------------------------------------- */
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* -------------------------------------------------------------
+         * 7. WEB AUDIO API SOFT ROMANTIC SYNTH MUSIC
+         * ------------------------------------------------------------- */
+        let audioCtx = null;
+        let isPlaying = false;
+        let synthInterval = null;
+
+        function playRomanticMelody() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 493.88];
+            let noteIdx = 0;
+
+            synthInterval = setInterval(() => {
+                if (!isPlaying) return;
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(notes[noteIdx % notes.length], audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.0);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 2.1);
+
+                noteIdx++;
+            }, 1200);
+        }
+
+        function toggleAudio() {
+            isPlaying = !isPlaying;
+            const btn = document.getElementById('musicToggleBtn');
+
+            if (isPlaying) {
+                playRomanticMelody();
+                btn.classList.add('bg-fuchsia-700/80', 'text-white');
+            } else {
+                if (synthInterval) clearInterval(synthInterval);
+                btn.classList.remove('bg-fuchsia-700/80', 'text-white');
+            }
+        }
+    </script>
+</body>
+</html>
